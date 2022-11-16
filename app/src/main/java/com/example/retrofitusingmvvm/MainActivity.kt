@@ -3,6 +3,7 @@ package com.example.retrofitusingmvvm
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -23,13 +24,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this,R.layout.activity_main)
 
+        val repository = (application as QuoteApplication).quotesRepository
 
-        val quoteService = RetrofitHelper.getInstance().create(QuoteService::class.java)
-        val repository = QuotesRepository(quoteService)
         mainViewModel = ViewModelProvider(this,MainViewModelFactory(repository)).get(MainViewModel::class.java)
 
         mainViewModel.quotes.observe(this, Observer {
-            Log.d("TAG", "onCreate: "+it.results.toString())
+            Toast.makeText(this@MainActivity, " "+it.results.size.toString(), Toast.LENGTH_SHORT).show()
         })
 
     }
